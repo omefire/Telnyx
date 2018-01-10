@@ -1,0 +1,17 @@
+<h3>Blog Feed</h3>
+<div>
+  <ul class="blogposts">
+    <li *ngFor="let blogPost of blogPosts">
+      <div id="blog-post-{{blogPost.id}}" style="margin-bottom: 0.3in">
+        <a routerLink="/blog/{{blogPost.id}}">
+          <h4>{{blogPost.title}}</h4>
+          {{blogPost.description}}
+        </a>
+        <div id="blog-post-meta">
+          By {{blogPost.author}}, On {{blogPost.datePublished}}
+        </div>
+      </div>
+      =======================
+    </li>
+  </ul>
+</div>
