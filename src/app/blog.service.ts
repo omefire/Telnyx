@@ -30,12 +30,33 @@ export class BlogService {
             blog.title,
             blog.author,
             blog.description,
+            blog.content,
             new Date(year, month, day),
             blog.slug
           );
         });
         resolve(blogPosts);
       })).catch(msg => reject(msg));
+    });
+    return promise;
+  }
+
+  // TODO: Test against error cases
+  getBlogPost(id: number): Promise<BlogPost> {
+    const promise = new Promise<BlogPost>((resolve, reject) => {
+      this.http.get(`${this.baseUrl}${this.blogPostUrl}/${id}`).toPromise().then(res => {
+        const bpJSON = res.json();
+        const [year, month, day] = bpJSON.publish_date.split('-');
+        const blogPost = new BlogPost(
+          bpJSON.id,
+          bpJSON.title,
+          bpJSON.author,
+          bpJSON.description,
+          bpJSON.content,
+          new Date(year, month, day),
+          bpJSON.slug);
+        resolve(blogPost);
+      });
     });
     return promise;
   }

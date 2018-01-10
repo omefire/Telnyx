@@ -1,3 +1,6 @@
-<p>
-  blog-post works!
-</p>
+<div *ngIf="blogPost">
+    <h4>{{blogPost.datePublished}}, By {{blogPost.author}}</h4>
+    === 
+    <div [innerHTML]="blogPost.content">
+    </div>
+</div>
