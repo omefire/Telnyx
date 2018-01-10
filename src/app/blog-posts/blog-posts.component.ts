@@ -17,6 +17,7 @@ export class BlogPostsComponent implements OnInit {
     this.getBlogPosts();
   }
 
+  // TODO: Dates! Are we in UTC ? Local ? Are we correctly sorting ?
   getBlogPosts(): void {
     this.blogService.getBlogPosts().then((blogPosts) => {
       this.blogPosts = blogPosts.sort((bp1, bp2) => {
