@@ -1,3 +1,6 @@
+<div *ngIf="isInErrorState" class="isa_error">
+    {{errorMessage}}
+</div>
 <div *ngIf="blogPost">
     <h4>{{blogPost.datePublished}}, By {{blogPost.author}}</h4>
     === 

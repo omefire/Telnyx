@@ -13,6 +13,8 @@ import { ActivatedRoute } from '@angular/router';
 export class BlogPostComponent implements OnInit {
 
   blogPost: BlogPost;
+  isInErrorState = false;
+  errorMessage = '';
 
   constructor(
     private blogService: BlogService,
@@ -24,11 +26,13 @@ export class BlogPostComponent implements OnInit {
   }
 
   // TODO: What to do in case of error ?
-  // TODO: What if an invalid id is passed in ?
   getBlogPost(): void {
     const id = +this.route.snapshot.paramMap.get('id');
     this.blogService.getBlogPost(id).then(bp => {
       this.blogPost = bp;
+    }).catch(msg => {
+      this.isInErrorState = true;
+      this.errorMessage = `Sorry, An error occured: ${msg}`;
     });
   }
 }

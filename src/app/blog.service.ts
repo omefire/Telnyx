@@ -41,7 +41,6 @@ export class BlogService {
     return promise;
   }
 
-  // TODO: Test against error cases
   getBlogPost(id: number): Promise<BlogPost> {
     const promise = new Promise<BlogPost>((resolve, reject) => {
       this.http.get(`${this.baseUrl}${this.blogPostUrl}/${id}`).toPromise().then(res => {
@@ -56,7 +55,7 @@ export class BlogService {
           new Date(year, month, day),
           bpJSON.slug);
         resolve(blogPost);
-      });
+      }).catch(msg => reject(msg));
     });
     return promise;
   }
