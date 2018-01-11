@@ -9,6 +9,7 @@ import { BlogPostsComponent } from './blog-posts/blog-posts.component';
 
 import { BlogService } from './blog.service';
 import { BlogPostComponent } from './blog-post/blog-post.component';
+import { CommentsComponent } from './comments/comments.component';
 
 const routing = RouterModule.forRoot([
   {
@@ -25,7 +26,8 @@ const routing = RouterModule.forRoot([
   declarations: [
     AppComponent,
     BlogPostsComponent,
-    BlogPostComponent
+    BlogPostComponent,
+    CommentsComponent
   ],
   imports: [
     BrowserModule,

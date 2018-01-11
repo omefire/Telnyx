@@ -1,0 +1,9 @@
+<div *ngIf="comments">
+  <ul>
+    <li *ngFor="let cmt of comments">
+      <b><i>{{cmt.user}} wrote on {{cmt.date}}:</i></b>
+      <p>{{cmt.content}}</p>
+      <app-comments [comments]="cmt.children"></app-comments>      
+    </li>
+  </ul>
+</div>
