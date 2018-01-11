@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
 import { BlogPost } from '../BlogPost';
+import { Comment } from '../Comment';
 import { BlogService } from '../blog.service';
 import { ActivatedRoute } from '@angular/router';
 
@@ -13,6 +14,7 @@ import { ActivatedRoute } from '@angular/router';
 export class BlogPostComponent implements OnInit {
 
   blogPost: BlogPost;
+  comments: Comment[];
   isInErrorState = false;
   errorMessage = '';
 
@@ -22,14 +24,17 @@ export class BlogPostComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.getBlogPost();
+    this.getBlogPostAndComments();
   }
 
-  // TODO: What to do in case of error ?
-  getBlogPost(): void {
+  getBlogPostAndComments(): void {
     const id = +this.route.snapshot.paramMap.get('id');
-    this.blogService.getBlogPost(id).then(bp => {
-      this.blogPost = bp;
+    const blogPostPromise = this.blogService.getBlogPost(id);
+    const commentsPromise = this.blogService.getComments(id);
+
+    Promise.all([blogPostPromise, commentsPromise]).then(values => {
+      this.blogPost = values[0];
+      this.comments = values[1];
     }).catch(msg => {
       this.isInErrorState = true;
       this.errorMessage = `Sorry, An error occured: ${msg}`;

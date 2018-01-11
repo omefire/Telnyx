@@ -1,14 +1,11 @@
 import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
-// import { of } from 'rxjs/observable/of';
-// import { catchError } from 'rxjs/operators';
-// import 'rxjs/add/operator/toPromise';
 import { HttpClient } from '@angular/common/http';
 import { Http } from '@angular/http';
 
-
 import { BlogPost } from './BlogPost';
+import { Comment } from './Comment';
 
 @Injectable()
 export class BlogService {
@@ -16,6 +13,7 @@ export class BlogService {
   // TODO: Move these to a config file
   private baseUrl = 'http://localhost:9000';
   private blogPostUrl = '/posts';
+  private commentsUrl = '/posts/{id}/comments';
 
   constructor(private http: Http) { }
 
@@ -58,5 +56,54 @@ export class BlogService {
       }).catch(msg => reject(msg));
     });
     return promise;
+  }
+
+  getComments(blogPostId: number): Promise<Comment[]> {
+    const promise = new Promise<Comment[]>((resolve, reject) => {
+      const url = `${this.baseUrl}${this.commentsUrl}`.replace('{id}', blogPostId.toString());
+      this.http.get(url).toPromise().then((res => {
+        const comments = this.createCommentGraph(res.json().filter(cmt => +cmt.postId === blogPostId));
+        resolve(comments);
+      })).catch(msg => reject(msg));
+    });
+    return promise;
+  }
+
+  // TODO: Handle performance in a future version
+  private createCommentGraph(cmtsJSON): Comment[] {
+    const IdToCmtMap = new Map<number, Comment>();
+    const cmtToChildrenMap = new Map<number, number[]>();
+
+    for (const cmt of cmtsJSON) {
+      IdToCmtMap.set(cmt.id, new Comment(
+        cmt.id,
+        cmt.postId,
+        cmt.user,
+        cmt.date,
+        cmt.content,
+        cmt.parent_id
+      ));
+    }
+
+    for (const cmt of cmtsJSON) {
+      cmtToChildrenMap.set(cmt.id, new Array<number>());
+    }
+
+    for (const cmt of cmtsJSON) {
+      if (cmt.parent_id) {
+        cmtToChildrenMap.get(cmt.parent_id).push(cmt.id);
+      }
+    }
+
+    cmtToChildrenMap.forEach((value, key, m) => {
+      const parentComment = IdToCmtMap.get(key);
+      value.forEach(val => {
+        const childComment = IdToCmtMap.get(val);
+        parentComment.addChild(childComment);
+      });
+    });
+
+    const result = Array.from(IdToCmtMap.values()).filter(cmt => cmt.parentId == null);
+    return result;
   }
 }
