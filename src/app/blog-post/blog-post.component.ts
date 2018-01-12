@@ -5,6 +5,7 @@ import { Comment } from '../Comment';
 import { BlogService } from '../blog.service';
 import { ActivatedRoute } from '@angular/router';
 
+declare var $: any;
 
 @Component({
   selector: 'app-blog-post',
@@ -36,6 +37,30 @@ export class BlogPostComponent implements OnInit {
       this.blogPost = values[0];
       this.comments = values[1];
     }).catch(msg => {
+      this.isInErrorState = true;
+      this.errorMessage = `Sorry, An error occured: ${msg}`;
+    });
+  }
+
+  showReplyBox() {
+    $('#reply-box-top-level').css('display', 'block');
+  }
+
+  hideReplyBox() {
+    $('#reply-box-top-level').css('display', 'none');
+  }
+
+  saveComment() {
+    const cmtContent = $('#reply-box-top-level').text();
+    this.blogService.AddComment(new Comment(
+      null,
+      +this.blogPost.id,
+      'omefire', // TODO: **Out of scope** Implement authentication functionality so we can have valid users
+      new Date(),
+      cmtContent,
+      null
+    )).then(res => window.location.reload())
+    .catch(msg => {
       this.isInErrorState = true;
       this.errorMessage = `Sorry, An error occured: ${msg}`;
     });

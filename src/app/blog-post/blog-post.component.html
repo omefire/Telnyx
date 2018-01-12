@@ -8,7 +8,20 @@
     </div>
     ===
     <div>
-        <h4><u>Comments:</u></h4>
-        <app-comments [comments]="comments"></app-comments>
+        <h4>
+            <u>Comments:</u>
+        </h4>
+        <button (click)="showReplyBox()">
+            <i>Add a comment</i>
+        </button>
+        <div id="reply-box-top-level" style="display: none">
+            <form>
+                <textarea id="text-edit-top-level" style="width: 500px; height: 100px;"></textarea>
+                <div></div>
+                <input type="button" style="display: inline" (click)="saveComment()" value="Submit">
+                <input type="button" style="display: inline" (click)="hideReplyBox()" value="Cancel">
+            </form>
+        </div>
+        <app-comments [comments]="comments" [blogPostId]="blogPost.id"></app-comments>
     </div>
 </div>
