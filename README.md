@@ -1,5 +1,15 @@
-# Telnyx starter kit
-> Boilerplate web application for Telnyx take-home code challenge
+# Telnyx
+> Blog App
+
+## What the final app looks like
+
+![Blog Feed](./pics/blog-feed.png?raw=true "Blog Feed")
+
+![Blog Detail](./pics/blog-detail.png?raw=true "Blog Detail")
+
+![Add Comment](./pics/add-comment.png?raw=true "Add Comment")
+
+![Reply To Comment](./pics/reply-to-comment.png?raw=true "Reply To Comment")
 
 ## Getting started
 
