@@ -1,9 +1,25 @@
+<div *ngIf="isInErrorState" class="isa_error">
+  {{errorMessage}}
+</div>
 <div *ngIf="comments">
   <ul>
     <li *ngFor="let cmt of comments">
-      <b><i>{{cmt.user}} wrote on {{cmt.date}}:</i></b>
-      <p>{{cmt.content}}</p>
-      <app-comments [comments]="cmt.children"></app-comments>      
+      <b>
+        <i>{{cmt.user}} wrote on {{cmt.date}}:</i>
+      </b>
+      {{cmt.content}}
+      <button #reply (click)="showReplyBox(cmt.id)">
+        <i>Reply</i>
+      </button>
+      <div id="reply-box-{{cmt.id}}" style="display: none">
+        <form>
+          <textarea id="text-edit-{{cmt.id}}" style="width: 500px; height: 100px;"></textarea>
+          <div></div>
+          <input type="button" style="display: inline" (click)="saveComment(cmt.id)" value="Submit">
+          <input type="button" style="display: inline" (click)="hideReplyBox(cmt.id)" value="Cancel">
+        </form>
+      </div>
+      <app-comments [comments]="cmt.children" [blogPostId]="blogPostId"></app-comments>
     </li>
   </ul>
 </div>

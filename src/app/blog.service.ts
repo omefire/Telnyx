@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
-import { Http } from '@angular/http';
+import { Http, Headers, RequestOptions } from '@angular/http';
 
 import { BlogPost } from './BlogPost';
 import { Comment } from './Comment';
@@ -105,5 +105,26 @@ export class BlogService {
 
     const result = Array.from(IdToCmtMap.values()).filter(cmt => cmt.parentId == null);
     return result;
+  }
+
+  AddComment(comment: Comment) {
+    const url = `${this.baseUrl}${this.commentsUrl}`.replace('{id}', comment.postId.toString());
+    const promise = new Promise((resolve, reject) => {
+      const headers = new Headers({ 'Content-Type': 'application/json' });
+      const options = new RequestOptions({ headers: headers });
+      const cmtJSON =  {
+        id: comment.id,
+        postId: comment.postId,
+        parent_id: comment.parentId,
+        user: comment.user,
+        date: comment.date.toString(),
+        content: comment.content
+      };
+      this.http.post(url, cmtJSON, options).toPromise().then(res => {
+        console.log(res);
+        resolve(res);
+      }).catch(msg => reject(msg));
+    });
+    return promise;
   }
 }
