@@ -95,3 +95,20 @@ interface Comment {
   "content": String;        // Comment content
 }
 ```
+
+
+```
+A unit test:
+
+  it('getBlogPostAndComments should fail if either blog posts or comments fail', () => {
+    const http = null;
+    const blogService = new BlogService(http);
+    const spy = spyOn(blogService, 'getBlogPost').and.throwError('Error while getting blog post');
+    const spy2 = spyOn(blogService, 'getComments').and.returnValues([]);
+    component.getBlogPostAndComments();
+    expect(component.isInErrorState).toBeTruthy();
+    expect(component.errorMessage).toBe('Error while getting blog post');
+    expect(blogService.getBlogPost).toHaveBeenCalled();
+    expect(blogService.getComments).toHaveBeenCalled();
+  });
+  ```
